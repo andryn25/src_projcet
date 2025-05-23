@@ -10,14 +10,70 @@ import java.awt.RenderingHints;
 import javax.swing.JTextField;
 
 public class LoginForm extends javax.swing.JPanel implements LoginView {
-    
+
     public LoginForm() {
-        initComponents(); 
-        setBackground(new Color(0,0,0,50));
+        initComponents();
+        setBackground(new Color(0, 0, 0, 50));
         setOpaque(false);
         lbWarning.setVisible(false);
         addPlaceholderStyle(tfUsername);
         addPlaceholderStyle(pfPassword);
+    }
+
+    @Override
+    public String getUsername() {
+        return tfUsername.getText();
+    }
+
+    @Override
+    public char[] getPassword() {
+        return pfPassword.getPassword();
+
+    }
+
+    @Override
+    public void showEmptyPasswordMessage() {
+        lbWarning.setText("Silahkan masukkan kata sandi kamu.");
+        lbWarning.setVisible(true);
+    }
+
+    @Override
+    public void hideAllMessages() {
+        lbWarning.setVisible(false);
+    }
+
+    @Override
+    public void showEmptyUsernameMessage() {
+        lbWarning.setText("Silahkan masukkan username kamu.");
+        lbWarning.setVisible(true);
+    }
+
+    @Override
+    public boolean isShowPasswordChecked() {
+        return cbShowPassword.isSelected();
+    }
+
+    @Override
+    public void showLoginFailedMessage() {
+        lbWarning.setText("Username atau kata sandi salah.");
+        lbWarning.setVisible(true);
+    }
+
+    @Override
+    public void setPasswordVisible(boolean visible) {
+        if (isPasswordPlaceholderVisible()) {
+            pfPassword.setEchoChar((char) 0);
+        } else if (visible) {
+            cbShowPassword.setSelected(visible);
+            pfPassword.setEchoChar((char) 0);
+        } else {
+            pfPassword.setEchoChar('•');
+        }
+    }
+
+    @Override
+    public boolean isPasswordPlaceholderVisible() {
+        return new String(getPassword()).equals("Masukan kata sandi");
     }
 
     public void addPlaceholderStyle(JTextField tf) {
@@ -30,6 +86,17 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         Font font = tf.getFont();
         font = font.deriveFont(Font.PLAIN);
         tf.setFont(font);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        //GradientPaint gp = new GradientPaint(0, 0, Color.decode("#abbaab"), 0, getHeight(), Color.decode("#abbaab"));
+        //g2.setPaint(gp);
+        g2.setColor(getBackground());
+        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 30, 30);
+        super.paintComponent(g);
     }
 
     @SuppressWarnings("unchecked")
@@ -70,6 +137,7 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(35, 35, 5, 0);
         add(lbGreeting, gridBagConstraints);
 
@@ -81,6 +149,7 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 35, 5, 0);
         add(lbUsername, gridBagConstraints);
 
@@ -105,6 +174,7 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 10;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 35, 0, 35);
         add(tfUsername, gridBagConstraints);
 
@@ -117,11 +187,13 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 35, 5, 0);
         add(lbPassword, gridBagConstraints);
 
         pfPassword.setFont(new java.awt.Font("Nunito", 0, 14)); // NOI18N
         pfPassword.setText("Masukan kata sandi");
+        pfPassword.setEchoChar('\u0000');
         pfPassword.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 pfPasswordFocusGained(evt);
@@ -142,6 +214,7 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 35, 0, 35);
         add(pfPassword, gridBagConstraints);
 
@@ -168,6 +241,7 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(20, 35, 0, 0);
         add(cbShowPassword, gridBagConstraints);
 
@@ -184,6 +258,7 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 5;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 35, 0, 35);
         add(btnLogin, gridBagConstraints);
 
@@ -221,6 +296,7 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 35, 20, 35);
         add(lbInstruction, gridBagConstraints);
 
@@ -236,6 +312,7 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 35, 20, 0);
         add(cbRemember, gridBagConstraints);
 
@@ -245,6 +322,7 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(35, 35, 35, 35);
         add(logo, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
@@ -255,6 +333,7 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
 
     private void cbShowPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbShowPasswordActionPerformed
         //loginPresenter.showHidePassword();
+        
     }//GEN-LAST:event_cbShowPasswordActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
@@ -303,7 +382,7 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
             addPlaceholderStyle(tfUsername);
             tfUsername.setText("Masukan username");
         } else {
-            tfUsername.select(0,0);
+            tfUsername.select(0, 0);
         }
     }//GEN-LAST:event_tfUsernameFocusLost
 
@@ -313,7 +392,6 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
             addPlaceholderStyle(pfPassword);
             pfPassword.setText("Masukan kata sandi");
             pfPassword.setEchoChar((char) 0);
-            
         } else {
             pfPassword.select(0, 0);
         }
@@ -324,7 +402,7 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
     }//GEN-LAST:event_formFocusGained
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-       
+
     }//GEN-LAST:event_formMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -342,72 +420,5 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
     private javax.swing.JPasswordField pfPassword;
     private javax.swing.JTextField tfUsername;
     // End of variables declaration//GEN-END:variables
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        //GradientPaint gp = new GradientPaint(0, 0, Color.decode("#abbaab"), 0, getHeight(), Color.decode("#abbaab"));
-        //g2.setPaint(gp);
-        g2.setColor(getBackground());
-        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 30, 30);
-        super.paintComponent(g);
-    }
-    
-    @Override
-    public String getUsername() {
-        return tfUsername.getText();
-    }
-
-    @Override
-    public char[] getPassword() {
-        return pfPassword.getPassword();
-       
-    }
-
-    @Override
-    public void showEmptyPasswordMessage() {
-        lbWarning.setText("Silahkan masukkan kata sandi kamu.");
-        lbWarning.setVisible(true);
-    }
-
-    @Override
-    public void hideAllMessages() {
-        lbWarning.setVisible(false);
-    }
-
-    @Override
-    public void showEmptyUsernameMessage() {
-        lbWarning.setText("Silahkan masukkan username kamu.");
-        lbWarning.setVisible(true);
-    }
-
-    @Override
-    public boolean isShowPasswordChecked() {
-        return cbShowPassword.isSelected();
-    }
-
-    @Override
-    public void showLoginFailedMessage() {
-        lbWarning.setText("Username atau kata sandi salah.");
-        lbWarning.setVisible(true);
-    }
-
-    @Override
-    public void setPasswordVisible(boolean visible) {
-        if (isPasswordPlaceholderVisible()) {
-            pfPassword.setEchoChar((char) 0);
-        } else if (visible) {
-            cbShowPassword.setSelected(visible);
-            pfPassword.setEchoChar((char) 0);
-        } else {
-            pfPassword.setEchoChar('•');
-        }
-    }
-
-    @Override
-    public boolean isPasswordPlaceholderVisible() {
-        return new String(getPassword()).equals("Masukan kata sandi");
-    }
 
 }
