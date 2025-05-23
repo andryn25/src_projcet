@@ -1,8 +1,12 @@
 package com.catering.view.impl;
 
+import com.catering.app.DatabaseConnection;
+import com.catering.model.service.impl.ServiceFactory;
+import com.catering.presenter.LoginPresenter;
+import com.catering.presenter.impl.PresenterFactory;
 import com.catering.view.LoginView;
-import java.awt.Color;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -10,10 +14,13 @@ import java.awt.RenderingHints;
 import javax.swing.JTextField;
 
 public class LoginForm extends javax.swing.JPanel implements LoginView {
+   
+    private final PresenterFactory presenterFactory = new PresenterFactory();
+    private final LoginPresenter loginPresenter;
 
     public LoginForm() {
+        loginPresenter = presenterFactory.createLoginPresenter(this, DatabaseConnection.getInstance().getConnection());
         initComponents();
-        setBackground(new Color(0, 0, 0, 50));
         setOpaque(false);
         lbWarning.setVisible(false);
         addPlaceholderStyle(tfUsername);
@@ -94,7 +101,7 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         //GradientPaint gp = new GradientPaint(0, 0, Color.decode("#abbaab"), 0, getHeight(), Color.decode("#abbaab"));
         //g2.setPaint(gp);
-        g2.setColor(getBackground());
+        g2.setColor(new Color(0, 0, 0, 50));
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), 30, 30);
         super.paintComponent(g);
     }
@@ -337,7 +344,7 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
     }//GEN-LAST:event_cbShowPasswordActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        //loginPresenter.btnLoginClicked();
+        loginPresenter.btnLoginClicked();
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void tfUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfUsernameActionPerformed

@@ -1,8 +1,10 @@
-
 package com.catering.view;
 
 import javax.swing.JComponent;
 
 public interface MainPanelView {
-    void setLayoutForm(JComponent component);
+
+    void setLoginForm(JComponent component);
+
+    void setSideBarPanel(JComponent component);
 }

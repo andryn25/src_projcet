@@ -22,21 +22,22 @@ public class FormsManager {
     }
     
     private Application application;
-    private MainPanel mainPanelViewImpl;
+    private MainPanel mainPanel;
     
-    public void initApplication(Application application, MainPanel mainPanelViewImpl) {
+    public void initApplication(Application application, MainPanel mainPanel) {
         this.application = application;
-        this.mainPanelViewImpl = mainPanelViewImpl;
+        this.mainPanel = mainPanel;
     }
     
-    public void showForm(JComponent form) {
+    public void showForm(JComponent component) {
         EventQueue.invokeLater(() -> {
-            mainPanelViewImpl.setLayoutForm(form);
+            mainPanel.setLoginForm(component);
         });
     }
     
-    public void showMenu(JComponent form) {
+    public void showMenu(JComponent component) {
         EventQueue.invokeLater(() -> {
+            mainPanel.setSideBarPanel(component);
             
         });
     }

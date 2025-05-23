@@ -7,12 +7,13 @@ import com.catering.presenter.LoginPresenter;
 // Presenter mengakses VIEW
 import com.catering.view.LoginView;
 import com.catering.view.impl.RegisterForm;
+import com.catering.view.impl.SideBarMenu;
 import com.catering.view.manager.FormsManager;
 
 class LoginHandler implements LoginPresenter {
 
-    private com.catering.view.LoginView loginView;
-    private com.catering.model.service.UserService userService;
+    private final com.catering.view.LoginView loginView;
+    private final com.catering.model.service.UserService userService;
 
     public LoginHandler(LoginView loginView, UserService userService) {
         this.loginView = loginView;
@@ -21,7 +22,8 @@ class LoginHandler implements LoginPresenter {
 
     @Override
     public void btnLoginClicked() {
-        String username = loginView.getUsername();
+        FormsManager.getInstance().showMenu(new SideBarMenu());
+        /*String username = loginView.getUsername();
         String password = new String(loginView.getPassword());
 
         if (username.isEmpty()) {
@@ -49,7 +51,7 @@ class LoginHandler implements LoginPresenter {
             com.catering.util.Console.logInfo("Customer baru saja login");
         } else {
             com.catering.util.Console.logWarning("User login tidak dikenali");
-        }
+        }*/
     }
 
     @Override

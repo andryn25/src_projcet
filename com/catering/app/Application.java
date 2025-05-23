@@ -1,7 +1,8 @@
 
 package com.catering.app;
 
-import com.catering.presenter.impl.MainPanelHandler;
+import com.catering.presenter.MainPanelPresenter;
+import com.catering.presenter.impl.PresenterFactory;
 import com.catering.view.impl.MainPanel;
 import com.catering.view.manager.FormsManager;
 import javax.swing.JFrame;
@@ -9,22 +10,24 @@ import javax.swing.WindowConstants;
 
 public class Application extends JFrame {
     
-    private final MainPanel mainPanelViewImpl;
+    private final PresenterFactory presenterFactory = new PresenterFactory();
+    private final MainPanelPresenter mainPanelPresenter;
+    private final MainPanel mainPanel;
     
     public Application() {
-        mainPanelViewImpl = new MainPanel();
+        mainPanel = new MainPanel();
+        mainPanelPresenter = presenterFactory.createMainPanelPresenter(mainPanel);
         initComponents();
-        setTitle("Application");
+        FormsManager.getInstance().initApplication(this, mainPanel);
+        mainPanelPresenter.showLoginForm();
+    }
+    
+    private void initComponents() {
+        setTitle("Catering App");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(1080, 720));
         setMinimumSize(new java.awt.Dimension(420, 460));
         setLocationRelativeTo(null);
-        setContentPane(mainPanelViewImpl);
-        FormsManager.getInstance().initApplication(this, mainPanelViewImpl);
-        new MainPanelHandler(mainPanelViewImpl).showLoginForm();
-    }
-    
-    private void initComponents() {
-        
+        setContentPane(mainPanel);
     };
 }

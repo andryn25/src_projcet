@@ -1,25 +1,28 @@
 package com.catering.view.impl;
 
-import com.catering.presenter.impl.MainPanelHandler;
+import com.catering.presenter.MainPanelPresenter;
+import com.catering.presenter.impl.PresenterFactory;
 import com.catering.view.MainPanelView;
+import java.awt.BorderLayout;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.LinearGradientPaint;
 import java.awt.RenderingHints;
 import javax.swing.JComponent;
+import org.w3c.dom.events.MutationEvent;
 
 public class MainPanel extends javax.swing.JPanel implements MainPanelView {
 
-    
-    private final MainPanelHandler mainPanelPresenter;
-    private LoginForm loginViewImpl;
-    private RegisterForm registerViewImpl;
+    private final PresenterFactory presenterFactory = new PresenterFactory();
+    private final MainPanelPresenter mainPanelPresenter;
 
     public MainPanel() {
-        mainPanelPresenter = new MainPanelHandler(this);
+        mainPanelPresenter = presenterFactory.createMainPanelPresenter(this);
         initComponents();
         setOpaque(false);
     }
@@ -39,7 +42,6 @@ public class MainPanel extends javax.swing.JPanel implements MainPanelView {
                 formMouseClicked(evt);
             }
         });
-        setLayout(new java.awt.GridBagLayout());
     }// </editor-fold>//GEN-END:initComponents
 
     private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
@@ -52,13 +54,15 @@ public class MainPanel extends javax.swing.JPanel implements MainPanelView {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+
+    //setup background
     @Override
     protected void paintComponent(java.awt.Graphics g) {
         Graphics2D g2 = (java.awt.Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         //Dua warna
         //GradientPaint gp = new GradientPaint(0, 0, Color.decode("#ffffff"), 0, 0, Color.decode("#abbaab"));
-        
+
         //Dua warna lebih
         float[] fractions = {0.0f, 0.5f, 1.0f};
         Color[] colors = {
@@ -74,17 +78,25 @@ public class MainPanel extends javax.swing.JPanel implements MainPanelView {
     }
 
     @Override
-    public void setLayoutForm(JComponent component) {
+    public void setLoginForm(JComponent loginForm) {
         removeAll();
+        setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.CENTER;
-        add(component, gbc);
+        add(loginForm, gbc);
         revalidate();
         repaint();
     }
-    
-    
+
+    @Override
+    public void setSideBarPanel(JComponent sideBar) {
+        removeAll();
+        setLayout(new BorderLayout(20,20));
+        add(sideBar, BorderLayout.WEST);
+        revalidate();
+        repaint();
+    }
 
 }
