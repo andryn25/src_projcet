@@ -1,9 +1,9 @@
 package com.catering.model.dao.impl;
 
-class OrderItemDaoImpl implements com.catering.model.dao.OrderItemDao {
+class OrderItemJdbc implements com.catering.model.dao.OrderItemDao {
     private java.sql.Connection connection;
 
-    public OrderItemDaoImpl(java.sql.Connection connection) {
+    public OrderItemJdbc(java.sql.Connection connection) {
         this.connection = connection;
     }
 

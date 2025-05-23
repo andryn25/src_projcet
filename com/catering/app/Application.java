@@ -2,17 +2,17 @@
 package com.catering.app;
 
 import com.catering.presenter.impl.MainPanelPresenterImpl;
-import com.catering.view.impl.MainPanelImpl;
+import com.catering.view.impl.MainPanel;
 import com.catering.view.manager.FormsManager;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 public class Application extends JFrame {
     
-    private final MainPanelImpl mainPanelViewImpl;
+    private final MainPanel mainPanelViewImpl;
     
     public Application() {
-        mainPanelViewImpl = new MainPanelImpl();
+        mainPanelViewImpl = new MainPanel();
         initComponents();
         setTitle("Application");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

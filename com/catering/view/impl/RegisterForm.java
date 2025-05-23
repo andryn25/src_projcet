@@ -1,9 +1,9 @@
 
 package com.catering.view.impl;
 
-public class RegisterFormImpl extends javax.swing.JPanel implements com.catering.view.RegisterForm {
+public class RegisterForm extends javax.swing.JPanel implements com.catering.view.RegisterView {
     
-    public RegisterFormImpl() {
+    public RegisterForm() {
         initComponents();
         setOpaque(false);
         addPlaceholderStyle(tfUsername);
@@ -129,7 +129,6 @@ public class RegisterFormImpl extends javax.swing.JPanel implements com.catering
 
         pfPassword.setFont(new java.awt.Font("Nunito", 0, 14)); // NOI18N
         pfPassword.setText("Masukan kata sandi");
-        pfPassword.setEchoChar('\u0000');
         pfPassword.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 pfPasswordFocusGained(evt);
@@ -156,7 +155,6 @@ public class RegisterFormImpl extends javax.swing.JPanel implements com.catering
 
         pfConfirmPassword.setFont(new java.awt.Font("Nunito", 0, 14)); // NOI18N
         pfConfirmPassword.setText("Konfirmasi kata sandi");
-        pfConfirmPassword.setEchoChar('\u0000');
         pfConfirmPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pfConfirmPasswordActionPerformed(evt);

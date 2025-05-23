@@ -1,7 +1,7 @@
 package com.catering.view.impl;
 
 import com.catering.presenter.impl.MainPanelPresenterImpl;
-import com.catering.view.MainPanel;
+import com.catering.view.MainPanelView;
 
 import java.awt.Color;
 import java.awt.GradientPaint;
@@ -11,14 +11,14 @@ import java.awt.LinearGradientPaint;
 import java.awt.RenderingHints;
 import javax.swing.JComponent;
 
-public class MainPanelImpl extends javax.swing.JPanel implements MainPanel {
+public class MainPanel extends javax.swing.JPanel implements MainPanelView {
 
     
     private final MainPanelPresenterImpl mainPanelPresenter;
-    private LoginFormImpl loginViewImpl;
-    private RegisterFormImpl registerViewImpl;
+    private LoginForm loginViewImpl;
+    private RegisterForm registerViewImpl;
 
-    public MainPanelImpl() {
+    public MainPanel() {
         mainPanelPresenter = new MainPanelPresenterImpl(this);
         initComponents();
         setOpaque(false);

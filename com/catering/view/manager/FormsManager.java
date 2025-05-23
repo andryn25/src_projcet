@@ -2,7 +2,7 @@
 package com.catering.view.manager;
 
 import com.catering.app.Application;
-import com.catering.view.impl.MainPanelImpl;
+import com.catering.view.impl.MainPanel;
 import java.awt.EventQueue;
 import javax.swing.JComponent;
 
@@ -22,9 +22,9 @@ public class FormsManager {
     }
     
     private Application application;
-    private MainPanelImpl mainPanelViewImpl;
+    private MainPanel mainPanelViewImpl;
     
-    public void initApplication(Application application, MainPanelImpl mainPanelViewImpl) {
+    public void initApplication(Application application, MainPanel mainPanelViewImpl) {
         this.application = application;
         this.mainPanelViewImpl = mainPanelViewImpl;
     }

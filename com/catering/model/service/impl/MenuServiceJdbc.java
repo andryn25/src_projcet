@@ -1,9 +1,9 @@
 package com.catering.model.service.impl;
 
-class MenuServiceImpl implements com.catering.model.service.MenuService {
+class MenuServiceJdbc implements com.catering.model.service.MenuService {
     private com.catering.model.dao.MenuDao menusDAO;
 
-    public MenuServiceImpl(com.catering.model.dao.MenuDao menusDAO) {
+    public MenuServiceJdbc(com.catering.model.dao.MenuDao menusDAO) {
         this.menusDAO = menusDAO;
     }
 

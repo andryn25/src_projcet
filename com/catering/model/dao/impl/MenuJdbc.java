@@ -1,9 +1,9 @@
 package com.catering.model.dao.impl;
 
-class MenuDaoImpl implements com.catering.model.dao.MenuDao {
+class MenuJdbc implements com.catering.model.dao.MenuDao {
     private java.sql.Connection connection;
 
-    public MenuDaoImpl(java.sql.Connection connection) {
+    public MenuJdbc(java.sql.Connection connection) {
         this.connection = connection;
     }
 

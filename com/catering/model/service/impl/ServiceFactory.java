@@ -14,7 +14,7 @@ public class ServiceFactory {
     
     public UserService createUserService() {
         DaoFactory daoFactory = new DaoFactory(connection);
-        return new UserServiceImpl(daoFactory.createUserDao());
+        return new UserServiceJdbc(daoFactory.createUserDao());
     }
     
 }

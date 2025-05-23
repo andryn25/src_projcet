@@ -12,6 +12,6 @@ public class DaoFactory {
     }
 
     public UserDao createUserDao() {
-        return new UserDaoImpl(connection);
+        return new UserJdbc(connection);
     }
 }

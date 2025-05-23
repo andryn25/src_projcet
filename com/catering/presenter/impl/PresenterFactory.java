@@ -3,7 +3,7 @@ package com.catering.presenter.impl;
 
 import com.catering.model.service.impl.ServiceFactory;
 import com.catering.presenter.LoginPresenter;
-import com.catering.view.LoginForm;
+import com.catering.view.LoginView;
 
 public class PresenterFactory {
     private final ServiceFactory serviceFactory;
@@ -12,7 +12,7 @@ public class PresenterFactory {
         this.serviceFactory = serviceFactory;
     }
     
-    public LoginPresenter createLoginPresenter(LoginForm loginView) {
+    public LoginPresenter createLoginPresenter(LoginView loginView) {
         return new LoginPresenterImpl(loginView, serviceFactory.createUserService());
     }
 }

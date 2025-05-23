@@ -1,24 +1,16 @@
 package com.catering.view;
 
-public interface RegisterForm {
+public interface LoginView {
 
-    String getNama();
-
-    String getEmail();
+    String getUsername();
 
     char[] getPassword();
-    
-    char[] getConfirmPassword();
-    
-    void showSignUpFailedMessage();
+
+    void showLoginFailedMessage();
 
     void showEmptyUsernameMessage();
-    
-    void showEmptyEmailMessage();
 
     void showEmptyPasswordMessage();
-    
-    void showEmptyConfirmPasswordMessage();
 
     void hideAllMessages();
 
@@ -27,5 +19,5 @@ public interface RegisterForm {
     boolean isShowPasswordChecked();
 
     boolean isPasswordPlaceholderVisible();
-    
+
 }

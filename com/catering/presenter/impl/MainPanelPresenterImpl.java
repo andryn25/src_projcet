@@ -1,19 +1,19 @@
 
 package com.catering.presenter.impl;
 
-import com.catering.view.impl.LoginFormImpl;
-import com.catering.view.MainPanel;
+import com.catering.view.impl.LoginForm;
+import com.catering.view.MainPanelView;
 import com.catering.view.manager.FormsManager;
 
 public class MainPanelPresenterImpl {
-    private final MainPanel mainPanelView;
+    private final MainPanelView mainPanelView;
     
-    public MainPanelPresenterImpl(MainPanel mainPanelView) {
+    public MainPanelPresenterImpl(MainPanelView mainPanelView) {
         this.mainPanelView = mainPanelView;
     }
     
     public void showLoginForm() {
-        FormsManager.getInstance().showForm(new LoginFormImpl());
+        FormsManager.getInstance().showForm(new LoginForm());
     }
     
     public void showNavigationPanel() {

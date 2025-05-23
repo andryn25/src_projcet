@@ -1,9 +1,9 @@
 package com.catering.model.dao.impl;
 
-class DeliveryDaoImpl implements com.catering.model.dao.DeliveryDao {
+class DeliveryJdbc implements com.catering.model.dao.DeliveryDao {
     private java.sql.Connection connection;
 
-    public DeliveryDaoImpl(java.sql.Connection connection) {
+    public DeliveryJdbc(java.sql.Connection connection) {
         this.connection = connection;
     }
 

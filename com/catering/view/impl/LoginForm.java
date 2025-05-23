@@ -1,6 +1,6 @@
 package com.catering.view.impl;
 
-import com.catering.view.LoginForm;
+import com.catering.view.LoginView;
 import java.awt.Color;
 
 import java.awt.Font;
@@ -9,9 +9,9 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import javax.swing.JTextField;
 
-public class LoginFormImpl extends javax.swing.JPanel implements LoginForm {
+public class LoginForm extends javax.swing.JPanel implements LoginView {
     
-    public LoginFormImpl() {
+    public LoginForm() {
         initComponents(); 
         setBackground(new Color(0,0,0,50));
         setOpaque(false);
@@ -122,7 +122,6 @@ public class LoginFormImpl extends javax.swing.JPanel implements LoginForm {
 
         pfPassword.setFont(new java.awt.Font("Nunito", 0, 14)); // NOI18N
         pfPassword.setText("Masukan kata sandi");
-        pfPassword.setEchoChar('\u0000');
         pfPassword.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 pfPasswordFocusGained(evt);

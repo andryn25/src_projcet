@@ -1,9 +1,9 @@
 package com.catering.model.dao.impl;
 
-class PaymentDaoImpl implements com.catering.model.dao.PaymentDao {
+class PaymentJdbc implements com.catering.model.dao.PaymentDao {
     private java.sql.Connection connection;
 
-    public PaymentDaoImpl(java.sql.Connection connection) {
+    public PaymentJdbc(java.sql.Connection connection) {
         this.connection = connection;
     }
 

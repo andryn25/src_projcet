@@ -5,16 +5,16 @@ import com.catering.model.User;
 import com.catering.model.service.UserService;
 import com.catering.presenter.LoginPresenter;
 // Presenter mengakses VIEW
-import com.catering.view.LoginForm;
-import com.catering.view.impl.RegisterFormImpl;
+import com.catering.view.LoginView;
+import com.catering.view.impl.RegisterForm;
 import com.catering.view.manager.FormsManager;
 
 class LoginPresenterImpl implements LoginPresenter {
 
-    private com.catering.view.LoginForm loginView;
+    private com.catering.view.LoginView loginView;
     private com.catering.model.service.UserService userService;
 
-    public LoginPresenterImpl(LoginForm loginView, UserService userService) {
+    public LoginPresenterImpl(LoginView loginView, UserService userService) {
         this.loginView = loginView;
         this.userService = userService;
     }
@@ -54,7 +54,7 @@ class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void onTextRegisterClicked() {
-        FormsManager.getInstance().showForm(new RegisterFormImpl());
+        FormsManager.getInstance().showForm(new RegisterForm());
     }
 
     @Override

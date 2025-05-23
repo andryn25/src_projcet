@@ -5,11 +5,11 @@ import com.catering.model.dao.UserDao;
 import com.catering.model.service.UserService;
 import java.util.List;
 
-class UserServiceImpl implements UserService {
+class UserServiceJdbc implements UserService {
 
     private final UserDao userDao;
 
-    public UserServiceImpl(UserDao userDao) {
+    public UserServiceJdbc(UserDao userDao) {
         this.userDao = userDao;
     }
 
