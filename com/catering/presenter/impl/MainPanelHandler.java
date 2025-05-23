@@ -5,10 +5,10 @@ import com.catering.view.impl.LoginForm;
 import com.catering.view.MainPanelView;
 import com.catering.view.manager.FormsManager;
 
-public class MainPanelPresenterImpl {
+public class MainPanelHandler {
     private final MainPanelView mainPanelView;
     
-    public MainPanelPresenterImpl(MainPanelView mainPanelView) {
+    public MainPanelHandler(MainPanelView mainPanelView) {
         this.mainPanelView = mainPanelView;
     }
     

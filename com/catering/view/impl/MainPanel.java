@@ -1,6 +1,6 @@
 package com.catering.view.impl;
 
-import com.catering.presenter.impl.MainPanelPresenterImpl;
+import com.catering.presenter.impl.MainPanelHandler;
 import com.catering.view.MainPanelView;
 
 import java.awt.Color;
@@ -14,12 +14,12 @@ import javax.swing.JComponent;
 public class MainPanel extends javax.swing.JPanel implements MainPanelView {
 
     
-    private final MainPanelPresenterImpl mainPanelPresenter;
+    private final MainPanelHandler mainPanelPresenter;
     private LoginForm loginViewImpl;
     private RegisterForm registerViewImpl;
 
     public MainPanel() {
-        mainPanelPresenter = new MainPanelPresenterImpl(this);
+        mainPanelPresenter = new MainPanelHandler(this);
         initComponents();
         setOpaque(false);
     }

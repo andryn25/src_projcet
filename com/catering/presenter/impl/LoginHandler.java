@@ -9,12 +9,12 @@ import com.catering.view.LoginView;
 import com.catering.view.impl.RegisterForm;
 import com.catering.view.manager.FormsManager;
 
-class LoginPresenterImpl implements LoginPresenter {
+class LoginHandler implements LoginPresenter {
 
     private com.catering.view.LoginView loginView;
     private com.catering.model.service.UserService userService;
 
-    public LoginPresenterImpl(LoginView loginView, UserService userService) {
+    public LoginHandler(LoginView loginView, UserService userService) {
         this.loginView = loginView;
         this.userService = userService;
     }

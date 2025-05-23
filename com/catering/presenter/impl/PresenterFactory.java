@@ -13,6 +13,6 @@ public class PresenterFactory {
     }
     
     public LoginPresenter createLoginPresenter(LoginView loginView) {
-        return new LoginPresenterImpl(loginView, serviceFactory.createUserService());
+        return new LoginHandler(loginView, serviceFactory.createUserService());
     }
 }

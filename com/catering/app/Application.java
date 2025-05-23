@@ -1,7 +1,7 @@
 
 package com.catering.app;
 
-import com.catering.presenter.impl.MainPanelPresenterImpl;
+import com.catering.presenter.impl.MainPanelHandler;
 import com.catering.view.impl.MainPanel;
 import com.catering.view.manager.FormsManager;
 import javax.swing.JFrame;
@@ -21,7 +21,7 @@ public class Application extends JFrame {
         setLocationRelativeTo(null);
         setContentPane(mainPanelViewImpl);
         FormsManager.getInstance().initApplication(this, mainPanelViewImpl);
-        new MainPanelPresenterImpl(mainPanelViewImpl).showLoginForm();
+        new MainPanelHandler(mainPanelViewImpl).showLoginForm();
     }
     
     private void initComponents() {
