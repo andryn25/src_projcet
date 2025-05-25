@@ -37,9 +37,6 @@ class UserJdbc implements UserDao {
                 user.setRole(resultSet.getString("role"));
                 users.add(user);
             }
-            resultSet.close();
-            statement.close();
-            connection.close();
             //com.catering.view.Console.log("Fetched " + users.size() + " users from the database.");
         } catch (SQLException e) {
             //com.catering.view.Console.logError("Error fetching all users: " + e.getMessage());

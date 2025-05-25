@@ -1,20 +1,20 @@
-package com.catering.view.impl;
+package com.catering.view.form;
 
 import com.catering.app.DatabaseConnection;
-import com.catering.model.service.impl.ServiceFactory;
 import com.catering.presenter.LoginPresenter;
 import com.catering.presenter.impl.PresenterFactory;
 import com.catering.view.LoginView;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import javax.swing.JTextField;
 
 public class LoginForm extends javax.swing.JPanel implements LoginView {
-   
+
     private final PresenterFactory presenterFactory = new PresenterFactory();
     private final LoginPresenter loginPresenter;
 
@@ -22,6 +22,7 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         loginPresenter = presenterFactory.createLoginPresenter(this, DatabaseConnection.getInstance().getConnection());
         initComponents();
         setOpaque(false);
+        pfPassword.setEchoChar('\u0000');
         lbWarning.setVisible(false);
         addPlaceholderStyle(tfUsername);
         addPlaceholderStyle(pfPassword);
@@ -82,6 +83,14 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
     public boolean isPasswordPlaceholderVisible() {
         return new String(getPassword()).equals("Masukan kata sandi");
     }
+    
+    @Override
+    public boolean isUsernamePlaceholderVisible() {
+        if (!getUsername().equals("Masukan username")) {
+            tfUsername.selectAll();
+        }
+        return true;
+    }
 
     public void addPlaceholderStyle(JTextField tf) {
         Font font = tf.getFont();
@@ -96,12 +105,63 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
     }
 
     @Override
+    public void removeUsernameTextFieldPlaceholder() {
+        tfUsername.setText("");
+        tfUsername.requestFocus();
+        removePlaceholderStyle(tfUsername);
+    }
+
+    @Override
+    public void removePasswordFieldPlaceholder() {
+        if (isPasswordPlaceholderVisible()) {
+            pfPassword.setText("");
+            pfPassword.requestFocus();
+            if (isShowPasswordChecked()) {
+                setPasswordVisible(isShowPasswordChecked());
+            } else {
+                pfPassword.setEchoChar('•');
+            }
+            removePlaceholderStyle(pfPassword);
+        } else {
+            pfPassword.selectAll();
+        }
+    }
+
+    @Override
+    public void addUsernameTextFieldPlaceholder() {
+        addPlaceholderStyle(tfUsername);
+        tfUsername.setText("Masukan username");
+    }
+
+    @Override
+    public boolean isUsernameEmpty() {
+        return getUsername().isEmpty();
+    }
+
+    @Override
+    public boolean isPasswordEmpty() {
+        return new String(getPassword()).isEmpty();
+    }
+
+    @Override
+    public void addPasswordFieldPlaceholder() {
+        String password = new String(pfPassword.getPassword());
+        if (password.isEmpty()) {
+            addPlaceholderStyle(pfPassword);
+            pfPassword.setText("Masukan kata sandi");
+            pfPassword.setEchoChar((char) 0);
+        } else {
+            pfPassword.select(0, 0);
+        }
+    }
+
+    @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         //GradientPaint gp = new GradientPaint(0, 0, Color.decode("#abbaab"), 0, getHeight(), Color.decode("#abbaab"));
         //g2.setPaint(gp);
-        g2.setColor(new Color(0, 0, 0, 50));
+        g2.setColor(new Color(255, 255, 255, 100));
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), 30, 30);
         super.paintComponent(g);
     }
@@ -119,11 +179,13 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         lbWarning = new javax.swing.JLabel();
         cbShowPassword = new javax.swing.JCheckBox();
         btnLogin = new javax.swing.JButton();
-        lbSignInInfo = new javax.swing.JLabel();
-        lbLinkSignIn = new javax.swing.JLabel();
         lbInstruction = new javax.swing.JLabel();
         cbRemember = new javax.swing.JCheckBox();
         logo = new javax.swing.JLabel();
+        subPanel1 = new javax.swing.JPanel();
+        lbSignInInfo = new javax.swing.JLabel();
+        lbLinkSignIn = new javax.swing.JLabel();
+        lbLinkForgetPassword = new javax.swing.JLabel();
 
         addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -142,7 +204,6 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(35, 35, 5, 0);
@@ -154,7 +215,6 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 35, 5, 0);
@@ -178,7 +238,6 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.weightx = 1.0;
@@ -192,7 +251,6 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 35, 5, 0);
@@ -200,7 +258,6 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
 
         pfPassword.setFont(new java.awt.Font("Nunito", 0, 14)); // NOI18N
         pfPassword.setText("Masukan kata sandi");
-        pfPassword.setEchoChar('\u0000');
         pfPassword.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 pfPasswordFocusGained(evt);
@@ -217,7 +274,6 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
@@ -230,7 +286,6 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipady = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 35, 10, 0);
@@ -246,7 +301,6 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(20, 35, 0, 0);
@@ -262,46 +316,17 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 9;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 5;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 35, 0, 35);
         add(btnLogin, gridBagConstraints);
 
-        lbSignInInfo.setFont(new java.awt.Font("Nunito", 0, 14)); // NOI18N
-        lbSignInInfo.setText("Belum punya akun ya?");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(20, 0, 35, 0);
-        add(lbSignInInfo, gridBagConstraints);
-
-        lbLinkSignIn.setFont(new java.awt.Font("Nunito", 0, 14)); // NOI18N
-        lbLinkSignIn.setForeground(new java.awt.Color(102, 102, 255));
-        lbLinkSignIn.setText("<html> <a href='#' style='color: blue;'>Daftar yuk</a></html>");
-        lbLinkSignIn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        lbLinkSignIn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lbLinkSignInMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(20, 0, 35, 0);
-        add(lbLinkSignIn, gridBagConstraints);
-
         lbInstruction.setFont(new java.awt.Font("Nunito", 1, 14)); // NOI18N
         lbInstruction.setText("Masukan username dan password untuk masuk");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 35, 20, 35);
@@ -317,7 +342,6 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 35, 20, 0);
@@ -327,11 +351,50 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 11;
+        gridBagConstraints.gridheight = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(35, 35, 35, 35);
         add(logo, gridBagConstraints);
+
+        subPanel1.setBackground(new Color(0,0,0,0));
+
+        lbSignInInfo.setFont(new java.awt.Font("Nunito", 0, 14)); // NOI18N
+        lbSignInInfo.setText("Belum punya akun ya?");
+        subPanel1.add(lbSignInInfo);
+
+        lbLinkSignIn.setFont(new java.awt.Font("Nunito", 0, 14)); // NOI18N
+        lbLinkSignIn.setForeground(new java.awt.Color(102, 102, 255));
+        lbLinkSignIn.setText("<html> <a href='#' style='color: blue;'>Daftar yuk</a></html>");
+        lbLinkSignIn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lbLinkSignIn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbLinkSignInMouseClicked(evt);
+            }
+        });
+        subPanel1.add(lbLinkSignIn);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 35, 0, 35);
+        add(subPanel1, gridBagConstraints);
+
+        lbLinkForgetPassword.setFont(new java.awt.Font("Nunito", 0, 14)); // NOI18N
+        lbLinkForgetPassword.setForeground(new java.awt.Color(102, 102, 255));
+        lbLinkForgetPassword.setText("<html> <a href='#' style='color: blue;'>Lupa Sandi?</a></html>");
+        lbLinkForgetPassword.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lbLinkForgetPassword.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbLinkForgetPasswordMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.insets = new java.awt.Insets(0, 35, 35, 35);
+        add(lbLinkForgetPassword, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void pfPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pfPasswordActionPerformed
@@ -339,8 +402,8 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
     }//GEN-LAST:event_pfPasswordActionPerformed
 
     private void cbShowPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbShowPasswordActionPerformed
-        //loginPresenter.showHidePassword();
-        
+        loginPresenter.showHidePassword();
+
     }//GEN-LAST:event_cbShowPasswordActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
@@ -355,53 +418,20 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         // TODO add your handling code here:
     }//GEN-LAST:event_cbRememberActionPerformed
 
-    private void lbLinkSignInMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbLinkSignInMouseClicked
-        //loginPresenter.onTextRegisterClicked();
-    }//GEN-LAST:event_lbLinkSignInMouseClicked
-
     private void tfUsernameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfUsernameFocusGained
-        if (tfUsername.getText().equals("Masukan username")) {
-            tfUsername.setText(null);
-            tfUsername.requestFocus();
-            removePlaceholderStyle(tfUsername);
-        } else {
-            tfUsername.selectAll();
-        }
+        loginPresenter.usernameTextFieldFocusGained();
     }//GEN-LAST:event_tfUsernameFocusGained
 
     private void pfPasswordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_pfPasswordFocusGained
-        if (isPasswordPlaceholderVisible()) {
-            pfPassword.setText("");
-            pfPassword.requestFocus();
-            if (isShowPasswordChecked()) {
-                setPasswordVisible(isShowPasswordChecked());
-            } else {
-                pfPassword.setEchoChar('•');
-            }
-            removePlaceholderStyle(pfPassword);
-        } else {
-            pfPassword.selectAll();
-        }
+        loginPresenter.passwordFieldFocusGained();
     }//GEN-LAST:event_pfPasswordFocusGained
 
     private void tfUsernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfUsernameFocusLost
-        if (tfUsername.getText().length() == 0) {
-            addPlaceholderStyle(tfUsername);
-            tfUsername.setText("Masukan username");
-        } else {
-            tfUsername.select(0, 0);
-        }
+        loginPresenter.usernameTextFieldFocusLost();
     }//GEN-LAST:event_tfUsernameFocusLost
 
     private void pfPasswordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_pfPasswordFocusLost
-        String password = new String(pfPassword.getPassword());
-        if (password.isEmpty()) {
-            addPlaceholderStyle(pfPassword);
-            pfPassword.setText("Masukan kata sandi");
-            pfPassword.setEchoChar((char) 0);
-        } else {
-            pfPassword.select(0, 0);
-        }
+        
     }//GEN-LAST:event_pfPasswordFocusLost
 
     private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
@@ -412,12 +442,21 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
 
     }//GEN-LAST:event_formMouseClicked
 
+    private void lbLinkSignInMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbLinkSignInMouseClicked
+        loginPresenter.textRegisterClicked();
+    }//GEN-LAST:event_lbLinkSignInMouseClicked
+
+    private void lbLinkForgetPasswordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbLinkForgetPasswordMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lbLinkForgetPasswordMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogin;
     private javax.swing.JCheckBox cbRemember;
     private javax.swing.JCheckBox cbShowPassword;
     private javax.swing.JLabel lbGreeting;
     private javax.swing.JLabel lbInstruction;
+    private javax.swing.JLabel lbLinkForgetPassword;
     private javax.swing.JLabel lbLinkSignIn;
     private javax.swing.JLabel lbPassword;
     private javax.swing.JLabel lbSignInInfo;
@@ -425,6 +464,7 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
     private javax.swing.JLabel lbWarning;
     private javax.swing.JLabel logo;
     private javax.swing.JPasswordField pfPassword;
+    private javax.swing.JPanel subPanel1;
     private javax.swing.JTextField tfUsername;
     // End of variables declaration//GEN-END:variables
 

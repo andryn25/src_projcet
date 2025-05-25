@@ -2,9 +2,9 @@
 package com.catering.presenter.impl;
 
 import com.catering.presenter.MainPanelPresenter;
-import com.catering.view.impl.LoginForm;
+import com.catering.view.form.LoginForm;
 import com.catering.view.MainPanelView;
-import com.catering.view.impl.SideBarMenu;
+import com.catering.view.menu.SidebarMenu;
 import com.catering.view.manager.FormsManager;
 
 class MainPanelHandler implements MainPanelPresenter{
@@ -21,6 +21,6 @@ class MainPanelHandler implements MainPanelPresenter{
     
     @Override
     public void showDashboard() {
-        FormsManager.getInstance().showMenu(new SideBarMenu());
+        FormsManager.getInstance().showMenu(new SidebarMenu());
     }
 }

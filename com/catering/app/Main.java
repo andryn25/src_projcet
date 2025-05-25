@@ -17,7 +17,7 @@ public class Main {
         //com.catering.view.test.MenusTest menusTest = new com.catering.view.test.MenusTest();
         //com.formdev.flatlaf.themes.FlatMacLightLaf.setup();
         try {
-            UIManager.setLookAndFeel(new FlatMacDarkLaf());
+            UIManager.setLookAndFeel(new FlatMacLightLaf());
         } catch (Exception ex) {
             ex.printStackTrace();
         }

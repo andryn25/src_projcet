@@ -1,6 +1,6 @@
 
 package com.catering.view;
 
-public interface SideBarView {
+public interface SidebarView {
     
 }

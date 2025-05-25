@@ -2,7 +2,7 @@
 package com.catering.view.manager;
 
 import com.catering.app.Application;
-import com.catering.view.impl.MainPanel;
+import com.catering.view.swing.MainPanel;
 import java.awt.EventQueue;
 import javax.swing.JComponent;
 

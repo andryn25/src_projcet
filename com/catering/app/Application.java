@@ -3,7 +3,7 @@ package com.catering.app;
 
 import com.catering.presenter.MainPanelPresenter;
 import com.catering.presenter.impl.PresenterFactory;
-import com.catering.view.impl.MainPanel;
+import com.catering.view.swing.MainPanel;
 import com.catering.view.manager.FormsManager;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;

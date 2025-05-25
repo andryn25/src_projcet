@@ -6,8 +6,8 @@ import com.catering.model.service.UserService;
 import com.catering.presenter.LoginPresenter;
 // Presenter mengakses VIEW
 import com.catering.view.LoginView;
-import com.catering.view.impl.RegisterForm;
-import com.catering.view.impl.SideBarMenu;
+import com.catering.view.form.RegisterForm;
+import com.catering.view.menu.SidebarMenu;
 import com.catering.view.manager.FormsManager;
 
 class LoginHandler implements LoginPresenter {
@@ -22,8 +22,8 @@ class LoginHandler implements LoginPresenter {
 
     @Override
     public void btnLoginClicked() {
-        FormsManager.getInstance().showMenu(new SideBarMenu());
-        /*String username = loginView.getUsername();
+
+        String username = loginView.getUsername();
         String password = new String(loginView.getPassword());
 
         if (username.isEmpty()) {
@@ -35,7 +35,7 @@ class LoginHandler implements LoginPresenter {
             loginView.showEmptyPasswordMessage();
             return;
         }
-        
+
         User user = userService.login(username, password);
 
         if (user == null) {
@@ -47,15 +47,17 @@ class LoginHandler implements LoginPresenter {
 
         if (userService.cekAdmin(user)) {
             com.catering.util.Console.logInfo("Admin baru saja login");
+            FormsManager.getInstance().showMenu(new SidebarMenu());
         } else if (userService.cekCustomer(user)) {
             com.catering.util.Console.logInfo("Customer baru saja login");
+            FormsManager.getInstance().showMenu(new SidebarMenu());
         } else {
             com.catering.util.Console.logWarning("User login tidak dikenali");
-        }*/
+        }
     }
 
     @Override
-    public void onTextRegisterClicked() {
+    public void textRegisterClicked() {
         FormsManager.getInstance().showForm(new RegisterForm());
     }
 
@@ -63,4 +65,32 @@ class LoginHandler implements LoginPresenter {
     public void showHidePassword() {
         loginView.setPasswordVisible(loginView.isShowPasswordChecked());
     }
+
+    @Override
+    public void usernameTextFieldFocusGained() {
+        if (loginView.isUsernamePlaceholderVisible()) {
+            loginView.removeUsernameTextFieldPlaceholder();
+        }
+    }
+
+    @Override
+    public void usernameTextFieldFocusLost() {
+        if (loginView.isUsernameEmpty()) {
+            loginView.addUsernameTextFieldPlaceholder();
+        }
+    }
+
+    @Override
+    public void passwordFieldFocusGained() {
+        
+    }
+
+    @Override
+    public void passwordFieldFocusLost() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
+    
+    
 }

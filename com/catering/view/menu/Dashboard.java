@@ -1,5 +1,5 @@
 
-package com.catering.view.impl;
+package com.catering.view.menu;
 
 import java.awt.Color;
 import java.awt.GradientPaint;
@@ -7,9 +7,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
-public class DashboardMenu extends javax.swing.JPanel {
+public class Dashboard extends javax.swing.JPanel {
 
-    public DashboardMenu() {
+    public Dashboard() {
         initComponents();
         setOpaque(false);
     }

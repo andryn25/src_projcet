@@ -19,5 +19,19 @@ public interface LoginView {
     boolean isShowPasswordChecked();
 
     boolean isPasswordPlaceholderVisible();
+    
+    boolean isUsernamePlaceholderVisible();
+    
+    boolean isUsernameEmpty();
+    
+    boolean isPasswordEmpty();
+    
+    void removeUsernameTextFieldPlaceholder();
+    
+    void removePasswordFieldPlaceholder();
+    
+    void addUsernameTextFieldPlaceholder();
+    
+    void addPasswordFieldPlaceholder();
 
 }
