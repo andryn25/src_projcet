@@ -1,19 +1,30 @@
 package com.catering.view.menu;
 
-import com.catering.view.SidebarView;
 import com.catering.view.form.LoginForm;
 import com.catering.view.manager.FormsManager;
+import com.catering.view.model.Menu;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
-public class SidebarMenu extends javax.swing.JPanel implements SidebarView {
+public class SidebarMenu extends javax.swing.JPanel {
 
     public SidebarMenu() {
         initComponents();
         setOpaque(false);
+        listMenu.setOpaque(false);
+        init();
+    }
+    
+    private void init() {
+        listMenu.addItem(new Menu("dashboard", "menu1", Menu.MenuType.MENU));
+        listMenu.addItem(new Menu("dashboard", "menu2", Menu.MenuType.MENU));
+        listMenu.addItem(new Menu("dashboard", "menu3", Menu.MenuType.MENU));
+        listMenu.addItem(new Menu("dashboard", "menu4", Menu.MenuType.MENU));
+        listMenu.addItem(new Menu("dashboard", "menu5", Menu.MenuType.MENU));
+        listMenu.addItem(new Menu("dashboard", "menu6", Menu.MenuType.MENU));
     }
 
     @Override
@@ -24,7 +35,7 @@ public class SidebarMenu extends javax.swing.JPanel implements SidebarView {
         g2.setPaint(gp);
         //g2.setColor(getBackground());
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
-        //g2.fillRect(0, 0, 20, getHeight());
+        g2.fillRect(getWidth() - 20, 0, getWidth(), getHeight());
         super.paintComponent(g);
     }
 
@@ -33,8 +44,7 @@ public class SidebarMenu extends javax.swing.JPanel implements SidebarView {
     private void initComponents() {
 
         lbTitle = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        listMenu = new com.catering.view.swing.ListMenu();
 
         lbTitle.setFont(new java.awt.Font("Nunito", 1, 20)); // NOI18N
         lbTitle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icon/logo-50.png"))); // NOI18N
@@ -45,22 +55,15 @@ public class SidebarMenu extends javax.swing.JPanel implements SidebarView {
             }
         });
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(jList1);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lbTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
+                .addComponent(lbTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
                 .addContainerGap())
-            .addComponent(jScrollPane1)
+            .addComponent(listMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -68,8 +71,7 @@ public class SidebarMenu extends javax.swing.JPanel implements SidebarView {
                 .addContainerGap()
                 .addComponent(lbTitle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(415, Short.MAX_VALUE))
+                .addComponent(listMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -79,8 +81,7 @@ public class SidebarMenu extends javax.swing.JPanel implements SidebarView {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList jList1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbTitle;
+    private com.catering.view.swing.ListMenu listMenu;
     // End of variables declaration//GEN-END:variables
 }

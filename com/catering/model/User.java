@@ -1,11 +1,11 @@
 package com.catering.model;
-
+// buat model user sesuai database.tabel 'catering.users'
 public class User {
-    private int id;
-    private String nama;
-    private String email;
-    private String password;
-    private String role; 
+    private int id; // id
+    private String nama; // nama
+    private String email; // email
+    private String password; // password
+    private String role; // role
     
     public User() {
         

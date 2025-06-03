@@ -1,8 +1,4 @@
-package com.catering.view.swing;
-
-import com.catering.presenter.MainPanelPresenter;
-import com.catering.presenter.impl.PresenterFactory;
-import com.catering.view.MainPanelView;
+package com.catering.app;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -14,31 +10,47 @@ import java.awt.GridBagLayout;
 import java.awt.LinearGradientPaint;
 import java.awt.MultipleGradientPaint;
 import java.awt.RenderingHints;
-import javax.swing.GroupLayout;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
-public class MainPanel extends javax.swing.JPanel implements MainPanelView {
+public final class MainPanel extends javax.swing.JPanel {
 
-    private final PresenterFactory presenterFactory = new PresenterFactory();
-    private final MainPanelPresenter mainPanelPresenter;
+    private MainPanelPresenter mainPanelPresenter;
 
     private enum BackgroundType {
 
-        GRADIENT2, GRADIENT3, SOLID
+        GRADIENT2, GRADIENT3, SOLID, IMAGE
     }
+
     private BackgroundType backgroundType = BackgroundType.GRADIENT2;
 
+    private BufferedImage backgroundImage;
     private Color gradientStart = Color.decode("#ffffff");
     private Color gradientMiddle = Color.decode("#ffffff");
     private Color gradientEnd = Color.decode("#ffffff");
     private Color solidColor = Color.BLACK;
 
     public MainPanel() {
-        mainPanelPresenter = presenterFactory.createMainPanelPresenter(this);
         initComponents();
     }
 
-    // method gradiasi 2 warna
+    @Override
+    public void setVisible(boolean visible) {
+        if (visible) {
+            java.awt.EventQueue.invokeLater(() -> {
+                mainPanelPresenter.showLoginForm();
+            });
+        }
+
+    }
+
+    public void setPresenter(MainPanelPresenter mainPanelPresenter) {
+        this.mainPanelPresenter = mainPanelPresenter;
+    }
+
+    // gradiasi 2 warna
     public void useGradient2(Color start, Color end) {
         this.backgroundType = BackgroundType.GRADIENT2;
         this.gradientStart = start;
@@ -46,7 +58,7 @@ public class MainPanel extends javax.swing.JPanel implements MainPanelView {
         repaint();
     }
 
-    //method gradiasi 3 warna
+    // gradiasi 3 warna
     public void useGradient3(Color start, Color middle, Color end) {
         this.backgroundType = BackgroundType.GRADIENT3;
         this.gradientStart = start;
@@ -55,7 +67,7 @@ public class MainPanel extends javax.swing.JPanel implements MainPanelView {
         repaint();
     }
 
-    //method warna solid
+    // warna solid
     public void useSolidBackground(Color background) {
         this.backgroundType = BackgroundType.SOLID;
         this.solidColor = background;
@@ -63,7 +75,39 @@ public class MainPanel extends javax.swing.JPanel implements MainPanelView {
         repaint();
     }
 
-    //setup warna background
+    //background dengan gambar
+    public void useImageBackground() {
+        this.backgroundType = BackgroundType.IMAGE;
+        try {
+            this.backgroundImage = ImageIO.read(new File("/home/achi/Downloads/bg.jpg"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        repaint();
+    }
+
+    // warna average sesui gambar background
+    public Color getAverageColor(BufferedImage image) {
+        long sumRed = 0, sumGreen = 0, sumBlue = 0;
+        int width = image.getWidth();
+        int height = image.getHeight();
+        int count = 0;
+
+        for (int y = 0; y < height; y += 5) { // lewati tiap 5 piksel untuk efisiensi
+            for (int x = 0; x < width; x += 5) {
+                int rgb = image.getRGB(x, y);
+                Color c = new Color(rgb);
+                sumRed += c.getRed();
+                sumGreen += c.getGreen();
+                sumBlue += c.getBlue();
+                count++;
+            }
+        }
+
+        return new Color((int) (sumRed / count), (int) (sumGreen / count), (int) (sumBlue / count));
+    }
+
+    //setup warna dan image background
     @Override
     protected void paintComponent(Graphics g) {
         if (backgroundType == BackgroundType.SOLID) {
@@ -72,7 +116,6 @@ public class MainPanel extends javax.swing.JPanel implements MainPanelView {
         } else {
             setOpaque(false);
             Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             if (backgroundType == BackgroundType.GRADIENT2) {
                 GradientPaint gp = new GradientPaint(0, 0, gradientStart, 0, getHeight(), gradientEnd);// getHeight = atas ke bawah, getWidth = kanan ke kiri
                 g2.setPaint(gp);
@@ -87,47 +130,81 @@ public class MainPanel extends javax.swing.JPanel implements MainPanelView {
                 LinearGradientPaint lgp = new LinearGradientPaint(0f, 0f, getWidth(), 0f, fractions, colors, MultipleGradientPaint.CycleMethod.NO_CYCLE);//getHeight = atas ke bawah, getWidth = kanan ke kiri
                 g2.setPaint(lgp);
                 g2.fillRect(0, 0, getWidth(), getHeight());
+            } else if (backgroundType == BackgroundType.IMAGE) {
+                if (backgroundImage != null) {
+                    int panelWidth = getWidth();
+                    int panelHeight = getHeight();
+
+                    int imgWidth = backgroundImage.getWidth(null);
+                    int imgHeight = backgroundImage.getHeight(null);
+
+                    // Hitung rasio gambar dan panel
+                    double imgAspect = (double) imgWidth / imgHeight;
+                    double panelAspect = (double) panelWidth / panelHeight;
+
+                    int drawWidth, drawHeight;
+                    int x, y;
+
+                    if (panelAspect > imgAspect) {
+                        // Panel lebih lebar dari gambar: fit tinggi
+                        drawHeight = panelHeight;
+                        drawWidth = (int) (drawHeight * imgAspect);
+                    } else {
+                        // Panel lebih tinggi dari gambar: fit lebar
+                        drawWidth = panelWidth;
+                        drawHeight = (int) (drawWidth / imgAspect);
+                    }
+
+                    // Center-kan gambar
+                    x = (panelWidth - drawWidth) / 2;
+                    y = (panelHeight - drawHeight) / 2;
+
+                    // Gambar dengan interpolasi halus
+                    Color backgroundFillColor = getAverageColor(backgroundImage);
+                    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                            RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                    g2.setColor(backgroundFillColor);
+                    g2.fillRect(0, 0, getWidth(), getHeight());
+                    g2.drawImage(backgroundImage, x, y, drawWidth, drawHeight, this);
+                }
+                g2.dispose();
             }
-            g2.dispose();
         }
     }
 
-    @Override
-    public void setLoginForm(JComponent loginForm) {
+    public void setForm(JComponent component) {
         removeAll();
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.CENTER;
-        add(loginForm, gbc);
+        add(component, gbc);
         useGradient2(Color.decode("#ffb347"), Color.decode("#ffcc33"));
         revalidate();
         repaint();
     }
 
-    @Override
-    public void setSideBarPanel(JComponent sideBar) {
+    public void setContentPanel(JComponent component) {
         removeAll();
-        //setLayout(new BorderLayout(20, 20));
-        //add(sideBar, BorderLayout.WEST);
-        GroupLayout layout = new GroupLayout(this);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addComponent(sideBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(734, Short.MAX_VALUE))
+                .addComponent(component, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(10, 10, 10))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addComponent(sideBar, javax.swing.GroupLayout.DEFAULT_SIZE, 674, Short.MAX_VALUE)
+                .addComponent(component, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(10, 10, 10))
         );
         useGradient2(Color.decode("#FFF8E1"), Color.decode("#FFECB3"));
+        component.setVisible(true);
         revalidate();
         repaint();
     }
@@ -136,9 +213,6 @@ public class MainPanel extends javax.swing.JPanel implements MainPanelView {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
-        sideBarMenu1 = new com.catering.view.menu.SidebarMenu();
-        dashboard1 = new com.catering.view.menu.Dashboard();
 
         addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -151,36 +225,15 @@ public class MainPanel extends javax.swing.JPanel implements MainPanelView {
             }
         });
 
-        javax.swing.GroupLayout dashboard1Layout = new javax.swing.GroupLayout(dashboard1);
-        dashboard1.setLayout(dashboard1Layout);
-        dashboard1Layout.setHorizontalGroup(
-            dashboard1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 680, Short.MAX_VALUE)
-        );
-        dashboard1Layout.setVerticalGroup(
-            dashboard1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(sideBarMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(dashboard1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18))
+            .addGap(0, 1076, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(dashboard1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sideBarMenu1, javax.swing.GroupLayout.DEFAULT_SIZE, 679, Short.MAX_VALUE))
-                .addGap(18, 18, 18))
+            .addGap(0, 692, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -193,8 +246,5 @@ public class MainPanel extends javax.swing.JPanel implements MainPanelView {
     }//GEN-LAST:event_formMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.catering.view.menu.Dashboard dashboard1;
-    private com.catering.view.menu.SidebarMenu sideBarMenu1;
     // End of variables declaration//GEN-END:variables
-
 }

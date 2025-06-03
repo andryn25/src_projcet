@@ -40,7 +40,7 @@ public class Menu {
     }
     
     public Icon toIcon() {
-        return new ImageIcon(getClass().getResource(""));
+        return new ImageIcon(getClass().getResource("/resources/icon/menu/" + icon + ".png"));
     }
     
     public static enum MenuType {

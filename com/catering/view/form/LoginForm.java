@@ -1,25 +1,20 @@
 package com.catering.view.form;
 
-import com.catering.app.DatabaseConnection;
 import com.catering.presenter.LoginPresenter;
-import com.catering.presenter.impl.PresenterFactory;
-import com.catering.view.LoginView;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GradientPaint;
+//import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import javax.swing.JTextField;
 
-public class LoginForm extends javax.swing.JPanel implements LoginView {
+public final class LoginForm extends javax.swing.JPanel {
 
-    private final PresenterFactory presenterFactory = new PresenterFactory();
-    private final LoginPresenter loginPresenter;
+    private LoginPresenter loginPresenter;
 
     public LoginForm() {
-        loginPresenter = presenterFactory.createLoginPresenter(this, DatabaseConnection.getInstance().getConnection());
         initComponents();
         setOpaque(false);
         pfPassword.setEchoChar('\u0000');
@@ -28,68 +23,53 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         addPlaceholderStyle(pfPassword);
     }
 
-    @Override
+    public void setPresenter(LoginPresenter loginPresenter) {
+        this.loginPresenter = loginPresenter;
+    }
+
     public String getUsername() {
         return tfUsername.getText();
     }
 
-    @Override
     public char[] getPassword() {
         return pfPassword.getPassword();
 
     }
 
-    @Override
     public void showEmptyPasswordMessage() {
         lbWarning.setText("Silahkan masukkan kata sandi kamu.");
         lbWarning.setVisible(true);
     }
 
-    @Override
     public void hideAllMessages() {
         lbWarning.setVisible(false);
     }
 
-    @Override
     public void showEmptyUsernameMessage() {
         lbWarning.setText("Silahkan masukkan username kamu.");
         lbWarning.setVisible(true);
     }
 
-    @Override
     public boolean isShowPasswordChecked() {
         return cbShowPassword.isSelected();
     }
 
-    @Override
     public void showLoginFailedMessage() {
         lbWarning.setText("Username atau kata sandi salah.");
         lbWarning.setVisible(true);
     }
 
-    @Override
     public void setPasswordVisible(boolean visible) {
-        if (isPasswordPlaceholderVisible()) {
-            pfPassword.setEchoChar((char) 0);
-        } else if (visible) {
-            cbShowPassword.setSelected(visible);
-            pfPassword.setEchoChar((char) 0);
-        } else {
-            pfPassword.setEchoChar('•');
-        }
+        char echoChar = (visible) ? ((char) 0) : '•' ;
+        pfPassword.setEchoChar(echoChar);
     }
 
-    @Override
     public boolean isPasswordPlaceholderVisible() {
         return new String(getPassword()).equals("Masukan kata sandi");
     }
-    
-    @Override
+
     public boolean isUsernamePlaceholderVisible() {
-        if (!getUsername().equals("Masukan username")) {
-            tfUsername.selectAll();
-        }
-        return true;
+        return getUsername().equals("Masukan username");
     }
 
     public void addPlaceholderStyle(JTextField tf) {
@@ -104,66 +84,47 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
         tf.setFont(font);
     }
 
-    @Override
     public void removeUsernameTextFieldPlaceholder() {
         tfUsername.setText("");
         tfUsername.requestFocus();
         removePlaceholderStyle(tfUsername);
     }
 
-    @Override
     public void removePasswordFieldPlaceholder() {
-        if (isPasswordPlaceholderVisible()) {
-            pfPassword.setText("");
-            pfPassword.requestFocus();
-            if (isShowPasswordChecked()) {
-                setPasswordVisible(isShowPasswordChecked());
-            } else {
-                pfPassword.setEchoChar('•');
-            }
-            removePlaceholderStyle(pfPassword);
-        } else {
-            pfPassword.selectAll();
-        }
+        pfPassword.setText("");
+        pfPassword.requestFocus();
+        removePlaceholderStyle(pfPassword);
     }
 
-    @Override
     public void addUsernameTextFieldPlaceholder() {
         addPlaceholderStyle(tfUsername);
         tfUsername.setText("Masukan username");
     }
 
-    @Override
     public boolean isUsernameEmpty() {
-        return getUsername().isEmpty();
+        return getUsername().trim().isEmpty();
     }
 
-    @Override
     public boolean isPasswordEmpty() {
         return new String(getPassword()).isEmpty();
     }
 
-    @Override
     public void addPasswordFieldPlaceholder() {
-        String password = new String(pfPassword.getPassword());
-        if (password.isEmpty()) {
-            addPlaceholderStyle(pfPassword);
-            pfPassword.setText("Masukan kata sandi");
-            pfPassword.setEchoChar((char) 0);
-        } else {
-            pfPassword.select(0, 0);
-        }
+        addPlaceholderStyle(pfPassword);
+        pfPassword.setText("Masukan kata sandi");
+        pfPassword.setEchoChar((char) 0);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g;
+        Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         //GradientPaint gp = new GradientPaint(0, 0, Color.decode("#abbaab"), 0, getHeight(), Color.decode("#abbaab"));
         //g2.setPaint(gp);
         g2.setColor(new Color(255, 255, 255, 100));
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), 30, 30);
         super.paintComponent(g);
+        g2.dispose();
     }
 
     @SuppressWarnings("unchecked")
@@ -403,7 +364,6 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
 
     private void cbShowPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbShowPasswordActionPerformed
         loginPresenter.showHidePassword();
-
     }//GEN-LAST:event_cbShowPasswordActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
@@ -419,19 +379,24 @@ public class LoginForm extends javax.swing.JPanel implements LoginView {
     }//GEN-LAST:event_cbRememberActionPerformed
 
     private void tfUsernameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfUsernameFocusGained
+        tfUsername.selectAll();
         loginPresenter.usernameTextFieldFocusGained();
     }//GEN-LAST:event_tfUsernameFocusGained
 
     private void pfPasswordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_pfPasswordFocusGained
+        pfPassword.selectAll();
         loginPresenter.passwordFieldFocusGained();
+        
     }//GEN-LAST:event_pfPasswordFocusGained
 
     private void tfUsernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfUsernameFocusLost
         loginPresenter.usernameTextFieldFocusLost();
+        tfUsername.select(0, 0);
     }//GEN-LAST:event_tfUsernameFocusLost
 
     private void pfPasswordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_pfPasswordFocusLost
-        
+        loginPresenter.passwordFieldFocusLost();
+        pfPassword.select(0, 0);
     }//GEN-LAST:event_pfPasswordFocusLost
 
     private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
